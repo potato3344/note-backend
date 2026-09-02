@@ -2,10 +2,7 @@
 builder = "NIXPACKS"
 
 [build.nixpacks]
-# 告诉系统先安装编译 Postgres 所需的基础工具
 apt_packages = "gcc libpq-dev python3-dev"
-
-# 告诉它用系统自带的 python 来运行
 nix_packages = "python310"
 
 [deploy]
