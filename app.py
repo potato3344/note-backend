@@ -22,7 +22,8 @@ def get_db():
             user='postgres',
             password='123456'
         )
-    return psycopg2.connect(database_url)
+    # 云端环境必须加上 sslmode='require'，否则 Railway 的安全策略会拒绝连接
+    return psycopg2.connect(database_url, sslmode='require')
 
 def init_db():
     """初始化数据库表"""
@@ -63,7 +64,7 @@ def init_db():
         conn.close()
         print("✅ 数据库初始化成功")
     except Exception as e:
-        print(f"⚠️ 数据库初始化: {e}")
+        print(f"⚠️ 数据库初始化失败: {e}")
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -239,5 +240,6 @@ def get_data():
 
 if __name__ == '__main__':
     init_db()
+    # 在 Railway 上，PORT 变量自动分配，本地默认 5000
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
